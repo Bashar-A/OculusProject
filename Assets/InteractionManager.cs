@@ -21,23 +21,15 @@ public class InteractionManager : MonoBehaviour
     
     private OVRHand _rightHand = null;
     private OVRHand _leftHand = null;
-    // Start is called before the first frame update
-
-    enum Fingers
-    {
-        Index  = OVRPlugin.HandFinger.Index,
-        Middle = OVRPlugin.HandFinger.Middle,
-        Ring   = OVRPlugin.HandFinger.Ring,
-        Pinky  = OVRPlugin.HandFinger.Pinky
-    }
+    
     void Start()
     {
         _rightHand = rightHandObject.GetComponent<OVRHand>();
         _leftHand = leftHandObject.GetComponent<OVRHand>();
-        Debug.LogWarning($"InteractionManager started");
+        Debug.Log($"InteractionManager started");
     }
     
-    void LateUpdate()
+    void Update()
     {
         var rightHandPinchFinger = -1;
         var leftHandPinchFinger = -1;
@@ -64,18 +56,18 @@ public class InteractionManager : MonoBehaviour
 
             if (leftHandPinchFinger != -1 && rightHandPinchFinger != -1)
             {
-                return;
+                break;
             }
         }
         
         if (leftHandPinchFinger == -1 && rightHandPinchFinger == -1)
         {
+            EventManager.RaiseOnInputGesture(InputGesture.Undefined);
             return;
         }
 
         UpdateSpheres(rightHandPinchFinger, leftHandPinchFinger);
-
-        Debug.LogWarning($"Pinching: {rightHandPinchFinger} AND {leftHandPinchFinger}");
+        Debug.Log($"Pinching: {rightHandPinchFinger} AND {leftHandPinchFinger}");
     }
 
     void UpdateSpheres(int rightHandFinger, int leftHandFinger)
@@ -92,15 +84,19 @@ public class InteractionManager : MonoBehaviour
         switch (rightHandFinger)
         {
             case (int) Fingers.Index:
+                EventManager.RaiseOnInputGesture(InputGesture.RightIndex);
                 indexR.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Middle:
+                EventManager.RaiseOnInputGesture(InputGesture.RightMiddle);
                 middleR.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Ring:
+                EventManager.RaiseOnInputGesture(InputGesture.RightRing);
                 ringR.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Pinky:
+                EventManager.RaiseOnInputGesture(InputGesture.RightPinky);
                 pinkyR.material.SetColor("_Color", Color.green);
                 break;
             default:
@@ -114,15 +110,19 @@ public class InteractionManager : MonoBehaviour
         switch (leftHandFinger)
         {
             case (int) Fingers.Index:
+                EventManager.RaiseOnInputGesture(InputGesture.LeftIndex);
                 indexL.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Middle:
+                EventManager.RaiseOnInputGesture(InputGesture.LeftMiddle);
                 middleL.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Ring:
+                EventManager.RaiseOnInputGesture(InputGesture.LeftRing);
                 ringL.material.SetColor("_Color", Color.green);
                 break;
             case (int) Fingers.Pinky:
+                EventManager.RaiseOnInputGesture(InputGesture.LeftPinky);
                 pinkyL.material.SetColor("_Color", Color.green);
                 break;
             default:
@@ -132,5 +132,13 @@ public class InteractionManager : MonoBehaviour
                 pinkyL.material.SetColor("_Color", Color.white);
                 break;
         }
+    }
+    
+    enum Fingers
+    {
+        Index  = OVRPlugin.HandFinger.Index,
+        Middle = OVRPlugin.HandFinger.Middle,
+        Ring   = OVRPlugin.HandFinger.Ring,
+        Pinky  = OVRPlugin.HandFinger.Pinky
     }
 }
