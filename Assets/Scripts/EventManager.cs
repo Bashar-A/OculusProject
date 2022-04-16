@@ -18,11 +18,11 @@ public class EventManager
         OnInputGesture?.Invoke(inputGesture);
         if (inputGesture == InputGesture.Undefined)
         {
-            Task.Delay(20).ContinueWith(_ => _canSendOnInputGestureEvent = true);
+            _canSendOnInputGestureEvent = true;
         }
         else
         {
-            Task.Delay(200).ContinueWith(_ => _canSendOnInputGestureEvent = true);   
+            Task.Delay(400).ContinueWith(_ => _canSendOnInputGestureEvent = true);   
         }
     }
 }
