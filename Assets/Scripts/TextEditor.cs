@@ -27,27 +27,6 @@ public class TextEditor : MonoBehaviour, IMixedRealityTouchHandler
     }
 
     #region Events
-    public void OnTextAction(TextAction action)
-    {
-        switch (action)
-        {
-            case TextAction.Copy:
-                CopyAction();
-                break;
-            case TextAction.Cut:
-                CutAction();
-                break;
-            case TextAction.Paste:
-                PasteAction();
-                break;
-            case TextAction.Delete:
-                DeleteAction();
-                break;
-            default:
-                return;
-        }
-    }
-
     public void OnTouchStarted(HandTrackingInputEventData eventData)
     {
         Debug.LogWarning("OnTouchStarted");
@@ -95,7 +74,7 @@ public class TextEditor : MonoBehaviour, IMixedRealityTouchHandler
     #endregion
     
     #region Actions
-    private void CopyAction()
+    public void OnCopyAction()
     {
         if (_state != TextState.Highlighted)
         {
@@ -106,7 +85,7 @@ public class TextEditor : MonoBehaviour, IMixedRealityTouchHandler
         _clipboardBuffer = GetText(_startIndex, _endIndex);
     }
 
-    private void CutAction()
+    public void OnCutAction()
     {
         if (_state != TextState.Highlighted)
         {
@@ -115,15 +94,15 @@ public class TextEditor : MonoBehaviour, IMixedRealityTouchHandler
         }
         
         _clipboardBuffer = GetText(_startIndex, _endIndex);
-        DeleteAction();
+        OnDeleteAction();
     }
 
-    private void PasteAction()
+    public void OnPasteAction()
     {
         switch (_state)
         {
             case TextState.Highlighted:
-                DeleteAction();
+                OnDeleteAction();
                 AppendText(_clipboardBuffer, _startIndex);
                 break;
             case TextState.PositionSelected:
@@ -135,13 +114,24 @@ public class TextEditor : MonoBehaviour, IMixedRealityTouchHandler
         }
     }
 
-    private void DeleteAction()
+    public void OnDeleteAction()
     {
         if (_state != TextState.Highlighted)
         {
             return;
         }
         DeleteText(_startIndex, _endIndex);
+        _state = TextState.None;
+        _startIndex = 0;
+        _endIndex = 0;
+    }
+    
+    public void OnResetStateAction()
+    {
+        RemoveHighlight();
+        _state = TextState.None;
+        _startIndex = 0;
+        _endIndex = 0;
     }
     #endregion
     
