@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit;
+﻿using Enums;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Utilities;
 
 public static class GestureUtils

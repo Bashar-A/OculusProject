@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Enums;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
